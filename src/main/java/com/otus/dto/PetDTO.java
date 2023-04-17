@@ -16,7 +16,7 @@ import java.util.List;
 public class PetDTO {
 
     @JsonProperty("id")
-    Integer id;
+    Long id;
 
     @JsonProperty("category")
     CategoryDTO category;

@@ -53,6 +53,7 @@
                 <configuration>
                     <source>${compiler.plugin.source}</source>
                     <target>${compiler.plugin.source}</target>
+                    <encoding>UTF-8</encoding>
                     <showDeprecation>true</showDeprecation>
                 </configuration>
             </plugin>
@@ -84,27 +85,27 @@
                     </execution>
                 </executions>
             </plugin>
-<!--            <plugin>-->
-<!--                <groupId>com.github.spotbugs</groupId>-->
-<!--                <artifactId>spotbugs-maven-plugin</artifactId>-->
-<!--                <version>4.7.2.1</version>-->
-<!--                <configuration>-->
-<!--                    <effort>Max</effort>-->
-<!--                    <threshold>Low</threshold>-->
-<!--                    <xmlOutput>true</xmlOutput>-->
-<!--                    <includeTests>true</includeTests>-->
-<!--                    <omitVisitors>UnreadFields</omitVisitors>-->
-<!--                </configuration>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <id>analyze-compile</id>-->
-<!--                        <phase>compile</phase>-->
-<!--                        <goals>-->
-<!--                            <goal>check</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--            </plugin>-->
+            <!--            <plugin>-->
+            <!--                <groupId>com.github.spotbugs</groupId>-->
+            <!--                <artifactId>spotbugs-maven-plugin</artifactId>-->
+            <!--                <version>4.7.2.1</version>-->
+            <!--                <configuration>-->
+            <!--                    <effort>Max</effort>-->
+            <!--                    <threshold>Low</threshold>-->
+            <!--                    <xmlOutput>true</xmlOutput>-->
+            <!--                    <includeTests>true</includeTests>-->
+            <!--                    <omitVisitors>UnreadFields</omitVisitors>-->
+            <!--                </configuration>-->
+            <!--                <executions>-->
+            <!--                    <execution>-->
+            <!--                        <id>analyze-compile</id>-->
+            <!--                        <phase>compile</phase>-->
+            <!--                        <goals>-->
+            <!--                            <goal>check</goal>-->
+            <!--                        </goals>-->
+            <!--                    </execution>-->
+            <!--                </executions>-->
+            <!--            </plugin>-->
         </plugins>
     </build>
 

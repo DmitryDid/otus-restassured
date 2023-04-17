@@ -5,6 +5,9 @@ import com.otus.dto.ApiResponseDTO;
 import com.otus.dto.CreatePetResponseDTO;
 import com.otus.dto.PetDTO;
 import com.otus.dto.PetGetDTO;
+import com.otus.helpers.ClearHelper;
+import io.restassured.http.ContentType;
+import io.restassured.response.Response;
 import org.junit.jupiter.api.Assertions;
 
 import java.io.File;
@@ -16,12 +19,13 @@ import java.util.Map;
 public class PetController extends AbstractController {
 
     // uploads an image
-    public static ApiResponseDTO uploadImage(Integer petId, String additionalMetadata, File file) {
+    public static ApiResponseDTO uploadImage(Long petId, String additionalMetadata, File file) {
         response = isSuccess(getBaseSpecification()
+                        .contentType(ContentType.MULTIPART)
                         .pathParam("petId", petId)
                         .formParam("additionalMetadata", additionalMetadata)
                         .multiPart(file)
-                        .post("/pet/1/uploadImage")
+                        .post("/pet/{petId}/uploadImage")
                         .then().extract().response(),
                 true);
         return response.as(ApiResponseDTO.class);
@@ -34,7 +38,9 @@ public class PetController extends AbstractController {
                         .post("/pet")
                         .then().extract().response(),
                 true);
-        return response.as(CreatePetResponseDTO.class);
+        CreatePetResponseDTO newPet = response.as(CreatePetResponseDTO.class);
+        ClearHelper.createdPetsId.put(newPet.getId(), 1);
+        return newPet;
     }
 
     // Update an existing pet
@@ -48,13 +54,13 @@ public class PetController extends AbstractController {
     }
 
     // Finds Pets by status
-    public static List<PetDTO> findsPetsByStatus(StatusInStoreData status) {
+    public static List<PetGetDTO> findsPetsByStatus(StatusInStoreData status) {
         response = isSuccess(getBaseSpecification()
                         .queryParams("status", status)
-                        .get("/pet")
+                        .get("/pet/findByStatus")
                         .then().extract().response(),
                 true);
-        return Arrays.asList(response.as(PetDTO[].class));
+        return Arrays.asList(response.as(PetGetDTO[].class));
     }
 
     // Find pet by ID
@@ -75,12 +81,14 @@ public class PetController extends AbstractController {
     }
 
     // Updates a pet in the store with form data
-    public static ApiResponseDTO updatesPetInStore(Integer petId, String name, String status) {
+    public static ApiResponseDTO updatesPetInStore(Long petId, String name, StatusInStoreData status) {
+        Map<String, String> params = new HashMap<>();
+        if (name != null) params.put("name", name);
+        if (status != null) params.put("status", status.toString());
         response = isSuccess(getBaseSpecification()
-                        .pathParam("petId", petId)
-                        .formParam("name", name)
-                        .formParam("status", status)
-                        .post("/pet")
+                        .contentType(ContentType.URLENC)
+                        .formParams(params)
+                        .post("/pet/{petId}", petId)
                         .then().extract().response(),
                 true);
         return response.as(ApiResponseDTO.class);
@@ -90,13 +98,22 @@ public class PetController extends AbstractController {
     public static ApiResponseDTO deletesPet(Long petId, String apiKey) {
         Map<String, String> headers = new HashMap<>();
         if (apiKey != null) headers.put("api_key", apiKey);
-
         response = isSuccess(getBaseSpecification()
                         .headers(headers)
                         .delete("/pet/" + ((petId == null) ? "" : petId))
                         .then().extract().response(),
                 true);
         return response.as(ApiResponseDTO.class);
+    }
+
+    // Deletes a pet
+    public static Response deletesPetAsResponse(Long petId, String apiKey) {
+        Map<String, String> headers = new HashMap<>();
+        if (apiKey != null) headers.put("api_key", apiKey);
+        return getBaseSpecification()
+                .headers(headers)
+                .delete("/pet/" + ((petId == null) ? "" : petId))
+                .then().extract().response();
     }
 
     public static void deletesPetWithError(Long petId, String apiKey, Integer statusCode) {

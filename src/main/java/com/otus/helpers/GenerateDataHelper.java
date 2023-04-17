@@ -17,4 +17,12 @@ public class GenerateDataHelper {
     public static String getRandomString(int length) {
         return RandomStringUtils.randomAlphabetic(length);
     }
+
+    public static String getRandomEmail() {
+        return String.format("%s@%s.ru", getRandomString(7), getRandomString(5)).toLowerCase();
+    }
+
+    public static String getRandomPhone() {
+        return String.format("89%s", getRandomNumber(9));
+    }
 }

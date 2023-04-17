@@ -1,6 +1,5 @@
-package com.otus.tests;
+package com.otus.tests.pet;
 
-import com.otus.base.TestBase;
 import com.otus.controllers.PetController;
 import com.otus.data.StatusInStoreData;
 import com.otus.dto.CreatePetResponseDTO;
@@ -12,27 +11,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import static com.otus.helpers.ConsoleHelper.step;
+
 @ExtendWith(Extension.class)
-public class AddPetTests extends TestBase {
-
-    @Test
-    @Description("Успешное создание питомца с заполнением всех полей")
-    void addNewPetSuccessfulTest() {
-        step("Создаем нового питомца");
-        PetDTO body = BodyHelper.getPetBody();
-        CreatePetResponseDTO response = PetController.addNewPet(body);
-
-        step("Проверяем данные в ответе");
-        Assertions.assertEquals(body.getCategory().getId(), response.getCategory().getId());
-        Assertions.assertEquals(body.getCategory().getName(), response.getCategory().getName());
-        Assertions.assertEquals(body.getName(), response.getName());
-        Assertions.assertEquals(1, response.getPhotoUrls().size());
-        Assertions.assertEquals(body.getPhotoUrls(), response.getPhotoUrls());
-        Assertions.assertEquals(1, response.getTags().size());
-        Assertions.assertEquals(2, response.getTags().get(0).getId());
-        Assertions.assertEquals(body.getTags().get(0).getName(), response.getTags().get(0).getName());
-        Assertions.assertEquals(StatusInStoreData.available, response.getStatus());
-    }
+public class CheckFieldsTests {
 
     @Test
     @Description("Создание питомца без заполнения поля category")
@@ -51,7 +33,7 @@ public class AddPetTests extends TestBase {
         Assertions.assertEquals(1, response.getTags().size());
         Assertions.assertEquals(2, response.getTags().get(0).getId());
         Assertions.assertEquals(body.getTags().get(0).getName(), response.getTags().get(0).getName());
-        Assertions.assertEquals(StatusInStoreData.available, response.getStatus());
+        Assertions.assertEquals(StatusInStoreData.AVAILABLE, response.getStatus());
     }
 
     @Test
@@ -72,7 +54,7 @@ public class AddPetTests extends TestBase {
         Assertions.assertEquals(1, response.getTags().size());
         Assertions.assertEquals(2, response.getTags().get(0).getId());
         Assertions.assertEquals(body.getTags().get(0).getName(), response.getTags().get(0).getName());
-        Assertions.assertEquals(StatusInStoreData.available, response.getStatus());
+        Assertions.assertEquals(StatusInStoreData.AVAILABLE, response.getStatus());
     }
 
     @Test
@@ -91,7 +73,7 @@ public class AddPetTests extends TestBase {
         Assertions.assertEquals(body.getName(), response.getName());
         Assertions.assertEquals(1, response.getPhotoUrls().size());
         Assertions.assertEquals(body.getPhotoUrls(), response.getPhotoUrls());
-        Assertions.assertEquals(StatusInStoreData.available, response.getStatus());
+        Assertions.assertEquals(StatusInStoreData.AVAILABLE, response.getStatus());
     }
 
     @Test
@@ -132,6 +114,6 @@ public class AddPetTests extends TestBase {
         Assertions.assertEquals(1, response.getTags().size());
         Assertions.assertEquals(2, response.getTags().get(0).getId());
         Assertions.assertEquals(body.getTags().get(0).getName(), response.getTags().get(0).getName());
-        Assertions.assertEquals(StatusInStoreData.available, response.getStatus());
+        Assertions.assertEquals(StatusInStoreData.AVAILABLE, response.getStatus());
     }
 }

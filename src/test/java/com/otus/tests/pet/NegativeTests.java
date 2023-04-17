@@ -1,33 +1,17 @@
-package com.otus.tests;
+package com.otus.tests.pet;
 
-import com.otus.base.TestBase;
 import com.otus.controllers.PetController;
-import com.otus.dto.ApiResponseDTO;
 import com.otus.extentions.Extension;
 import com.otus.helpers.BodyHelper;
 import com.otus.helpers.GenerateDataHelper;
 import jdk.jfr.Description;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import static com.otus.helpers.ConsoleHelper.step;
+
 @ExtendWith(Extension.class)
-public class DeletePetTests extends TestBase {
-
-    @Test
-    @Description("Успешное удаление питомца")
-    void deletePetSuccessfulTest() {
-        step("Создаем нового питомца");
-        long petID = PetController.addNewPet(BodyHelper.getPetBody()).getId();
-
-        step("Удаляем питомца");
-        ApiResponseDTO response = PetController.deletesPet(petID, null);
-
-        step("Проверяем данные в ответе");
-        Assertions.assertEquals(200, response.getCode());
-        Assertions.assertEquals("unknown", response.getType());
-        Assertions.assertEquals(petID + "", response.getMessage());
-    }
+public class NegativeTests {
 
     @Test
     @Description("Повторное удаление питомца")
@@ -50,5 +34,14 @@ public class DeletePetTests extends TestBase {
 
         step("Удаляем питомца");
         PetController.deletesPetWithError(petID, null, 404);
+    }
+
+    @Test
+    @Description("Поиск не существующего питомца")
+    void findNonExistPetTest() {
+        long petId = GenerateDataHelper.getNewId();
+
+        step("Выполняем поиск не существующего питомца");
+        PetController.findPetByIDWithError(petId, 404);
     }
 }
