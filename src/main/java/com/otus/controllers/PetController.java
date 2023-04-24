@@ -39,7 +39,7 @@ public class PetController extends AbstractController {
                         .then().extract().response(),
                 true);
         CreatePetResponseDTO newPet = response.as(CreatePetResponseDTO.class);
-        ClearHelper.createdPetsId.put(newPet.getId(), 1);
+        ClearHelper.CREATED_PETS_ID.put(newPet.getId(), 1);
         return newPet;
     }
 

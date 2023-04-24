@@ -16,7 +16,7 @@ public class UserController extends AbstractController {
                         .then().extract().response(),
                 true);
         ApiResponseDTO result = response.as(ApiResponseDTO.class);
-        ClearHelper.createdUsersId.put(body.getUsername(), 1);
+        ClearHelper.CREATED_USERS_ID.put(body.getUsername(), 1);
         return result;
     }
 

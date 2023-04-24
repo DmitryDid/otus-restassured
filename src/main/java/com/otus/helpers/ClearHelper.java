@@ -6,26 +6,24 @@ import com.otus.controllers.UserController;
 import java.util.HashMap;
 import java.util.Map;
 
-import static java.lang.Thread.sleep;
-
 public class ClearHelper {
 
-    public static final Map<Long, Integer> createdPetsId = new HashMap<>();
-    public static final Map<String, Integer> createdUsersId = new HashMap<>();
+    public static final Map<Long, Integer> CREATED_PETS_ID = new HashMap<>();
+    public static final Map<String, Integer> CREATED_USERS_ID = new HashMap<>();
 
     public static void deleteAllPets() {
-        createdPetsId.entrySet().stream()
+        CREATED_PETS_ID.entrySet().stream()
                 .forEach(k -> {
                     if (k.getValue() > 0) {
                         while (true) {
                             int statusCode = PetController.deletesPetAsResponse(k.getKey(), null).getStatusCode();
                             System.out.println("status code: " + statusCode);
                             if (statusCode == 404) {
-                                createdPetsId.put(k.getKey(), 0);
+                                CREATED_PETS_ID.put(k.getKey(), 0);
                                 break;
                             }
                             try {
-                                sleep(100);
+                                Thread.sleep(100);
                             } catch (InterruptedException e) {
                                 throw new RuntimeException(e);
                             }
@@ -35,18 +33,18 @@ public class ClearHelper {
     }
 
     public static void deleteAllUsers() {
-        createdUsersId.entrySet().stream()
+        CREATED_USERS_ID.entrySet().stream()
                 .forEach(k -> {
                     if (k.getValue() > 0) {
                         while (true) {
                             int statusCode = UserController.deleteUserAsResponse(k.getKey()).getStatusCode();
                             System.out.println("status code: " + statusCode);
                             if (statusCode == 404) {
-                                createdUsersId.put(k.getKey(), 0);
+                                CREATED_USERS_ID.put(k.getKey(), 0);
                                 break;
                             }
                             try {
-                                sleep(100);
+                                Thread.sleep(100);
                             } catch (InterruptedException e) {
                                 throw new RuntimeException(e);
                             }
