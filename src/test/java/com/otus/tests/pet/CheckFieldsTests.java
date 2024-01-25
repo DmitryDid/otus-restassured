@@ -1,119 +1,122 @@
 package com.otus.tests.pet;
 
-import com.otus.controllers.PetController;
-import com.otus.data.StatusInStoreData;
 import com.otus.dto.CreatePetResponseDTO;
 import com.otus.dto.PetDTO;
 import com.otus.extentions.Extension;
-import com.otus.helpers.BodyHelper;
-import com.otus.helpers.ConsoleHelper;
 import jdk.jfr.Description;
-import lombok.extern.java.Log;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
+import static com.otus.controllers.PetController.addNewPet;
+import static com.otus.data.StatusInStoreData.AVAILABLE;
+import static com.otus.helpers.BodyHelper.getPetBody;
+import static com.otus.helpers.ConsoleHelper.step;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 @ExtendWith(Extension.class)
 public class CheckFieldsTests {
 
+    PetDTO body;
+
     @Test
     @Description("Создание питомца без заполнения поля category")
     void addNewPetWithoutCategoryTest() {
-        ConsoleHelper.step("Создаем нового питомца");
-        PetDTO body = BodyHelper.getPetBody();
+        step("Создаем нового питомца");
+        body = getPetBody();
         body.setCategory(null);
-        CreatePetResponseDTO response = PetController.addNewPet(body);
+        CreatePetResponseDTO response = addNewPet(body);
 
-        ConsoleHelper.step("Проверяем данные в ответе");
-        Assertions.assertNull(response.getCategory());
+        step("Проверяем данные в ответе");
+        assertNull(response.getCategory());
 
-        Assertions.assertEquals(body.getName(), response.getName());
-        Assertions.assertEquals(1, response.getPhotoUrls().size());
-        Assertions.assertEquals(body.getPhotoUrls(), response.getPhotoUrls());
-        Assertions.assertEquals(1, response.getTags().size());
-        Assertions.assertEquals(2, response.getTags().get(0).getId());
-        Assertions.assertEquals(body.getTags().get(0).getName(), response.getTags().get(0).getName());
-        Assertions.assertEquals(StatusInStoreData.AVAILABLE, response.getStatus());
+        assertEquals(body.getName(), response.getName());
+        assertEquals(1, response.getPhotoUrls().size());
+        assertEquals(body.getPhotoUrls(), response.getPhotoUrls());
+        assertEquals(1, response.getTags().size());
+        assertEquals(2, response.getTags().get(0).getId());
+        assertEquals(body.getTags().get(0).getName(), response.getTags().get(0).getName());
+        assertEquals(AVAILABLE, response.getStatus());
     }
 
     @Test
     @Description("Создание питомца без заполнения поля name")
     void addNewPetWithoutNameTest() {
-        ConsoleHelper.step("Создаем нового питомца");
-        PetDTO body = BodyHelper.getPetBody();
+        step("Создаем нового питомца");
+        body = getPetBody();
         body.setName(null);
-        CreatePetResponseDTO response = PetController.addNewPet(body);
+        CreatePetResponseDTO response = addNewPet(body);
 
-        ConsoleHelper.step("Проверяем данные в ответе");
-        Assertions.assertNull(response.getName());
+        step("Проверяем данные в ответе");
+        assertNull(response.getName());
 
-        Assertions.assertEquals(response.getCategory().getId(), response.getCategory().getId());
-        Assertions.assertEquals(body.getCategory().getName(), response.getCategory().getName());
-        Assertions.assertEquals(1, response.getPhotoUrls().size());
-        Assertions.assertEquals(body.getPhotoUrls(), response.getPhotoUrls());
-        Assertions.assertEquals(1, response.getTags().size());
-        Assertions.assertEquals(2, response.getTags().get(0).getId());
-        Assertions.assertEquals(body.getTags().get(0).getName(), response.getTags().get(0).getName());
-        Assertions.assertEquals(StatusInStoreData.AVAILABLE, response.getStatus());
+        assertEquals(response.getCategory().getId(), response.getCategory().getId());
+        assertEquals(body.getCategory().getName(), response.getCategory().getName());
+        assertEquals(1, response.getPhotoUrls().size());
+        assertEquals(body.getPhotoUrls(), response.getPhotoUrls());
+        assertEquals(1, response.getTags().size());
+        assertEquals(2, response.getTags().get(0).getId());
+        assertEquals(body.getTags().get(0).getName(), response.getTags().get(0).getName());
+        assertEquals(AVAILABLE, response.getStatus());
     }
 
     @Test
     @Description("Создание питомца без заполнения поля tags")
     void addNewPetWithoutTagsTest() {
-        ConsoleHelper.step("Создаем нового питомца");
-        PetDTO body = BodyHelper.getPetBody();
+        step("Создаем нового питомца");
+        body = getPetBody();
         body.setTags(null);
-        CreatePetResponseDTO response = PetController.addNewPet(body);
+        CreatePetResponseDTO response = addNewPet(body);
 
-        ConsoleHelper.step("Проверяем данные в ответе");
-        Assertions.assertEquals(0, response.getTags().size());
+        step("Проверяем данные в ответе");
+        assertEquals(0, response.getTags().size());
 
-        Assertions.assertEquals(response.getCategory().getId(), response.getCategory().getId());
-        Assertions.assertEquals(body.getCategory().getName(), response.getCategory().getName());
-        Assertions.assertEquals(body.getName(), response.getName());
-        Assertions.assertEquals(1, response.getPhotoUrls().size());
-        Assertions.assertEquals(body.getPhotoUrls(), response.getPhotoUrls());
-        Assertions.assertEquals(StatusInStoreData.AVAILABLE, response.getStatus());
+        assertEquals(response.getCategory().getId(), response.getCategory().getId());
+        assertEquals(body.getCategory().getName(), response.getCategory().getName());
+        assertEquals(body.getName(), response.getName());
+        assertEquals(1, response.getPhotoUrls().size());
+        assertEquals(body.getPhotoUrls(), response.getPhotoUrls());
+        assertEquals(AVAILABLE, response.getStatus());
     }
 
     @Test
     @Description("Создание питомца без заполнения поля status")
     void addNewPetWithoutStatusTest() {
-        ConsoleHelper.step("Создаем нового питомца");
-        PetDTO body = BodyHelper.getPetBody();
+        step("Создаем нового питомца");
+        body = getPetBody();
         body.setStatus(null);
-        CreatePetResponseDTO response = PetController.addNewPet(body);
+        CreatePetResponseDTO response = addNewPet(body);
 
-        ConsoleHelper.step("Проверяем данные в ответе");
-        Assertions.assertNull(response.getStatus());
+        step("Проверяем данные в ответе");
+        assertNull(response.getStatus());
 
-        Assertions.assertEquals(response.getCategory().getId(), response.getCategory().getId());
-        Assertions.assertEquals(body.getCategory().getName(), response.getCategory().getName());
-        Assertions.assertEquals(body.getName(), response.getName());
-        Assertions.assertEquals(1, response.getPhotoUrls().size());
-        Assertions.assertEquals(body.getPhotoUrls(), response.getPhotoUrls());
-        Assertions.assertEquals(1, response.getTags().size());
-        Assertions.assertEquals(2, response.getTags().get(0).getId());
-        Assertions.assertEquals(body.getTags().get(0).getName(), response.getTags().get(0).getName());
+        assertEquals(response.getCategory().getId(), response.getCategory().getId());
+        assertEquals(body.getCategory().getName(), response.getCategory().getName());
+        assertEquals(body.getName(), response.getName());
+        assertEquals(1, response.getPhotoUrls().size());
+        assertEquals(body.getPhotoUrls(), response.getPhotoUrls());
+        assertEquals(1, response.getTags().size());
+        assertEquals(2, response.getTags().get(0).getId());
+        assertEquals(body.getTags().get(0).getName(), response.getTags().get(0).getName());
     }
 
     @Test
     @Description("Создание питомца без заполнения поля photoUrls")
     void addNewPetWithoutPhotoUrlsTest() {
-        ConsoleHelper.step("Создаем нового питомца");
-        PetDTO body = BodyHelper.getPetBody();
+        step("Создаем нового питомца");
+        body = getPetBody();
         body.setPhotoUrls(null);
-        CreatePetResponseDTO response = PetController.addNewPet(body);
+        CreatePetResponseDTO response = addNewPet(body);
 
-        ConsoleHelper.step("Проверяем данные в ответе");
-        Assertions.assertEquals(0, response.getPhotoUrls().size());
+        step("Проверяем данные в ответе");
+        assertEquals(0, response.getPhotoUrls().size());
 
-        Assertions.assertEquals(response.getCategory().getId(), response.getCategory().getId());
-        Assertions.assertEquals(body.getCategory().getName(), response.getCategory().getName());
-        Assertions.assertEquals(body.getName(), response.getName());
-        Assertions.assertEquals(1, response.getTags().size());
-        Assertions.assertEquals(2, response.getTags().get(0).getId());
-        Assertions.assertEquals(body.getTags().get(0).getName(), response.getTags().get(0).getName());
-        Assertions.assertEquals(StatusInStoreData.AVAILABLE, response.getStatus());
+        assertEquals(response.getCategory().getId(), response.getCategory().getId());
+        assertEquals(body.getCategory().getName(), response.getCategory().getName());
+        assertEquals(body.getName(), response.getName());
+        assertEquals(1, response.getTags().size());
+        assertEquals(2, response.getTags().get(0).getId());
+        assertEquals(body.getTags().get(0).getName(), response.getTags().get(0).getName());
+        assertEquals(AVAILABLE, response.getStatus());
     }
 }

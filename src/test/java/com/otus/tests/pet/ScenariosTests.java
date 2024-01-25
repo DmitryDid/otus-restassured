@@ -1,15 +1,11 @@
 package com.otus.tests.pet;
 
-import com.otus.controllers.PetController;
 import com.otus.dto.ApiResponseDTO;
 import com.otus.dto.CreatePetResponseDTO;
 import com.otus.dto.PetDTO;
 import com.otus.dto.PetGetDTO;
 import com.otus.extentions.Extension;
-import com.otus.helpers.BodyHelper;
-import com.otus.helpers.ConsoleHelper;
 import jdk.jfr.Description;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -17,96 +13,104 @@ import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.otus.controllers.PetController.*;
+import static com.otus.helpers.BodyHelper.getPetBody;
+import static com.otus.helpers.ConsoleHelper.step;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 @ExtendWith(Extension.class)
 public class ScenariosTests {
+
+    PetDTO petBody;
 
     @Test
     @Description("Поиск питомца")
     void scenario_1() {
-        ConsoleHelper.step("Создаем нового питомца в магазине");
-        PetDTO petBody = BodyHelper.getPetBody();
-        CreatePetResponseDTO newPet = PetController.addNewPet(petBody);
+        step("Создаем нового питомца в магазине");
+        petBody = getPetBody();
+        CreatePetResponseDTO newPet = addNewPet(petBody);
 
-        ConsoleHelper.step("Выполняем поиск созданного питомца по id");
-        PetGetDTO findPet = PetController.findPetByID(newPet.getId());
+        step("Выполняем поиск созданного питомца по id");
+        PetGetDTO findPet = findPetByID(newPet.getId());
 
-        ConsoleHelper.step("Сравниваем данные найденного и созданного питомца");
-        Assertions.assertEquals(newPet.getId(), findPet.getId());
-        Assertions.assertEquals(newPet.getCategory().getId(), findPet.getCategory().getId());
-        Assertions.assertEquals(newPet.getCategory().getName(), findPet.getCategory().getName());
-        Assertions.assertEquals(newPet.getName(), findPet.getName());
-        Assertions.assertEquals(newPet.getPhotoUrls().size(), findPet.getPhotoUrls().size());
-        Assertions.assertEquals(newPet.getPhotoUrls(), findPet.getPhotoUrls());
-        Assertions.assertEquals(newPet.getTags().size(), findPet.getTags().size());
-        Assertions.assertEquals(newPet.getTags().get(0).getId(), findPet.getTags().get(0).getId());
-        Assertions.assertEquals(newPet.getTags().get(0).getName(), findPet.getTags().get(0).getName());
-        Assertions.assertEquals(newPet.getStatus(), findPet.getStatus());
+        step("Сравниваем данные найденного и созданного питомца");
+        assertEquals(newPet.getId(), findPet.getId());
+        assertEquals(newPet.getCategory().getId(), findPet.getCategory().getId());
+        assertEquals(newPet.getCategory().getName(), findPet.getCategory().getName());
+        assertEquals(newPet.getName(), findPet.getName());
+        assertEquals(newPet.getPhotoUrls().size(), findPet.getPhotoUrls().size());
+        assertEquals(newPet.getPhotoUrls(), findPet.getPhotoUrls());
+        assertEquals(newPet.getTags().size(), findPet.getTags().size());
+        assertEquals(newPet.getTags().get(0).getId(), findPet.getTags().get(0).getId());
+        assertEquals(newPet.getTags().get(0).getName(), findPet.getTags().get(0).getName());
+        assertEquals(newPet.getStatus(), findPet.getStatus());
 
-        ConsoleHelper.step("Выполняем поиск созданного питомца по статусу");
-        List<PetGetDTO> pets = PetController.findsPetsByStatus(newPet.getStatus());
-        Assertions.assertTrue(pets.size() > 0);
+        step("Выполняем поиск созданного питомца по статусу");
+        List<PetGetDTO> pets = findsPetsByStatus(newPet.getStatus());
+        assertTrue(pets.size() > 0);
 
-        ConsoleHelper.step("Проверяем что созданный питомец имеется среди найденных");
+        step("Проверяем что созданный питомец имеется среди найденных");
         pets = pets.stream()
                 .filter(p -> p.getId().equals(newPet.getId()))
                 .collect(Collectors.toList());
-        Assertions.assertEquals(1, pets.size());
+        assertEquals(1, pets.size());
 
-        ConsoleHelper.step("Сравниваем данные найденного и созданного питомца");
-        Assertions.assertEquals(newPet.getId(), pets.get(0).getId());
-        Assertions.assertEquals(newPet.getCategory().getId(), pets.get(0).getCategory().getId());
-        Assertions.assertEquals(newPet.getCategory().getName(), pets.get(0).getCategory().getName());
-        Assertions.assertEquals(newPet.getName(), pets.get(0).getName());
-        Assertions.assertEquals(newPet.getPhotoUrls().size(), pets.get(0).getPhotoUrls().size());
-        Assertions.assertEquals(newPet.getPhotoUrls(), pets.get(0).getPhotoUrls());
-        Assertions.assertEquals(newPet.getTags().size(), pets.get(0).getTags().size());
-        Assertions.assertEquals(newPet.getTags().get(0).getId(), pets.get(0).getTags().get(0).getId());
-        Assertions.assertEquals(newPet.getTags().get(0).getName(), pets.get(0).getTags().get(0).getName());
-        Assertions.assertEquals(newPet.getStatus(), pets.get(0).getStatus());
+        step("Сравниваем данные найденного и созданного питомца");
+        assertEquals(newPet.getId(), pets.get(0).getId());
+        assertEquals(newPet.getCategory().getId(), pets.get(0).getCategory().getId());
+        assertEquals(newPet.getCategory().getName(), pets.get(0).getCategory().getName());
+        assertEquals(newPet.getName(), pets.get(0).getName());
+        assertEquals(newPet.getPhotoUrls().size(), pets.get(0).getPhotoUrls().size());
+        assertEquals(newPet.getPhotoUrls(), pets.get(0).getPhotoUrls());
+        assertEquals(newPet.getTags().size(), pets.get(0).getTags().size());
+        assertEquals(newPet.getTags().get(0).getId(), pets.get(0).getTags().get(0).getId());
+        assertEquals(newPet.getTags().get(0).getName(), pets.get(0).getTags().get(0).getName());
+        assertEquals(newPet.getStatus(), pets.get(0).getStatus());
     }
 
     @Test
     @Description("Удаление питомца")
     void scenario_2() {
-        ConsoleHelper.step("Создаем нового питомца в магазине");
-        PetDTO petBody = BodyHelper.getPetBody();
-        CreatePetResponseDTO newPet = PetController.addNewPet(petBody);
+        step("Создаем нового питомца в магазине");
+        petBody = getPetBody();
+        CreatePetResponseDTO newPet = addNewPet(petBody);
 
-        ConsoleHelper.step("Проверяем что созданный питомец имеется среди найденных");
-        List<PetGetDTO> pets = PetController.findsPetsByStatus(newPet.getStatus()).stream()
+        step("Проверяем что созданный питомец имеется среди найденных");
+        List<PetGetDTO> pets = findsPetsByStatus(newPet.getStatus()).stream()
                 .filter(p -> p.getId().equals(newPet.getId()))
                 .collect(Collectors.toList());
-        Assertions.assertEquals(1, pets.size());
+        assertEquals(1, pets.size());
 
-        ConsoleHelper.step("Удаляем питомца");
-        ApiResponseDTO deleteResponse = PetController.deletesPet(newPet.getId(), null);
+        step("Удаляем питомца");
+        ApiResponseDTO deleteResponse = deletesPet(newPet.getId(), null);
 
-        ConsoleHelper.step("Проверяем данные в ответе");
-        Assertions.assertEquals(200, deleteResponse.getCode());
-        Assertions.assertEquals("unknown", deleteResponse.getType());
-        Assertions.assertEquals(newPet.getId().toString(), deleteResponse.getMessage());
+        step("Проверяем данные в ответе");
+        assertEquals(200, deleteResponse.getCode());
+        assertEquals("unknown", deleteResponse.getType());
+        assertEquals(newPet.getId().toString(), deleteResponse.getMessage());
 
-        ConsoleHelper.step("Проверяем что созданный питомец отсутствует среди найденных");
-        pets = PetController.findsPetsByStatus(newPet.getStatus()).stream()
+        step("Проверяем что созданный питомец отсутствует среди найденных");
+        pets = findsPetsByStatus(newPet.getStatus()).stream()
                 .filter(p -> p.getId().equals(newPet.getId()))
                 .collect(Collectors.toList());
-        Assertions.assertEquals(0, pets.size());
+        assertEquals(0, pets.size());
     }
 
     @Test
     @Description("Выгружаем фотографию питомца в магазин")
     void scenario_3() {
-        ConsoleHelper.step("Создаем нового питомца в магазине");
-        PetDTO petBody = BodyHelper.getPetBody();
-        CreatePetResponseDTO newPet = PetController.addNewPet(petBody);
+        step("Создаем нового питомца в магазине");
+        petBody = getPetBody();
+        CreatePetResponseDTO newPet = addNewPet(petBody);
 
-        ConsoleHelper.step("Обновляем питомцу фотографию");
-        ApiResponseDTO uploadResponse = PetController.uploadImage(newPet.getId(), "Кот вырос",
+        step("Обновляем питомцу фотографию");
+        ApiResponseDTO uploadResponse = uploadImage(newPet.getId(), "Кот вырос",
                 new File("src/test/resources/photos/cats_update_image.jpeg"));
 
-        ConsoleHelper.step("Проверяем данные в ответе");
-        Assertions.assertEquals(200, uploadResponse.getCode());
-        Assertions.assertEquals("unknown", uploadResponse.getType());
-        Assertions.assertTrue(uploadResponse.getMessage().contains("File uploaded"));
+        step("Проверяем данные в ответе");
+        assertEquals(200, uploadResponse.getCode());
+        assertEquals("unknown", uploadResponse.getType());
+        assertTrue(uploadResponse.getMessage().contains("File uploaded"));
     }
 }
