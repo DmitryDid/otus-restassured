@@ -1,5 +1,8 @@
 package com.otus.data;
 
+import lombok.Getter;
+
+@Getter
 public enum StatusInStoreData {
 
     AVAILABLE("available"),
@@ -12,7 +15,4 @@ public enum StatusInStoreData {
         this.name = name;
     }
 
-    public String getName() {
-        return name;
-    }
 }

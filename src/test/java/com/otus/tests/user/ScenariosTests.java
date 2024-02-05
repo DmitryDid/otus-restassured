@@ -18,11 +18,13 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 @ExtendWith(Extension.class)
 public class ScenariosTests {
 
+    UserDTO userBody;
+
     @Test
     @Description("Создание и поиск пользователя")
     void scenario_1() {
         step("Создаем нового пользователя");
-        UserDTO userBody = getUserBody();
+        userBody = getUserBody();
         ApiResponseDTO response = createUser(userBody);
 
         step("Проверяем данные в ответе");
@@ -47,7 +49,7 @@ public class ScenariosTests {
     @Description("Удаление пользователя")
     void scenario_2() {
         step("Создаем нового пользователя");
-        UserDTO userBody = getUserBody();
+        userBody = getUserBody();
         ApiResponseDTO response = createUser(userBody);
         assertEquals(200, response.getCode());
 

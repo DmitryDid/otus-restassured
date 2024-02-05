@@ -19,6 +19,7 @@ public class Extension implements BeforeAllCallback, AfterAllCallback {
 
     @Override
     public void afterAll(ExtensionContext context) {
+        System.out.println("\nafterAll() Удаляем созданные записи");
         ClearHelper.deleteAllPets();
         ClearHelper.deleteAllUsers();
     }

@@ -16,8 +16,7 @@ import java.util.stream.Collectors;
 import static com.otus.controllers.PetController.*;
 import static com.otus.helpers.BodyHelper.getPetBody;
 import static com.otus.helpers.ConsoleHelper.step;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(Extension.class)
 public class ScenariosTests {
@@ -48,7 +47,7 @@ public class ScenariosTests {
 
         step("Выполняем поиск созданного питомца по статусу");
         List<PetGetDTO> pets = findsPetsByStatus(newPet.getStatus());
-        assertTrue(pets.size() > 0);
+        assertFalse(pets.isEmpty());
 
         step("Проверяем что созданный питомец имеется среди найденных");
         pets = pets.stream()

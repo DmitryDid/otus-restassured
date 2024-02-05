@@ -1,7 +1,6 @@
 package com.otus.tests.pet;
 
 import com.otus.extentions.Extension;
-import com.otus.helpers.ConsoleHelper;
 import com.otus.helpers.GenerateDataHelper;
 import jdk.jfr.Description;
 import org.junit.jupiter.api.Test;
@@ -20,7 +19,7 @@ public class NegativeTests {
         step("Создаем нового питомца");
         long petID = addNewPet(getPetBody()).getId();
 
-        ConsoleHelper.step("Удаляем питомца");
+        step("Удаляем питомца");
         deletesPet(petID, null);
 
         step("Повторно удаляем питомца");
